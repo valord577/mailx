@@ -27,7 +27,7 @@ func TestSample(t *testing.T) {
 	m.SetSubject("This is a subject of email.")
 
 	m.SetPlainBody("This is a text/plain body.")
-	m.Attach("attach.txt", "download.txt", func(w io.Writer) (int, error) {
+	m.Attach("attach.txt", func(w io.Writer) (int, error) {
 		return io.WriteString(w, "this is a txt attachment.")
 	})
 

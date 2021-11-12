@@ -9,12 +9,8 @@ import (
 
 type file struct {
 	// It is the name of file.
-	// It is used for 'Content-ID', when the file is embedded
+	// It is used for 'Content-ID', if the file is embedded.
 	filename string
-	// It is the name of file when downloading, if the file is attachment
-	// If empty, use filename.
-	saved string
-
 	// If true, the file is attachment.
 	// If false, the file is embedded.
 	attachment bool
@@ -31,16 +27,11 @@ func (f *file) contentType() string {
 }
 
 func (f *file) disposition() string {
-	filename := f.saved
-	if filename == "" {
-		filename = f.filename
-	}
-
 	disp := ""
 	if f.attachment {
 		disp = "attachment"
 	} else {
 		disp = "inline"
 	}
-	return disp + `; filename="` + filename + `"`
+	return disp + `; filename="` + f.filename + `"`
 }

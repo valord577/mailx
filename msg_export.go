@@ -11,6 +11,7 @@ import (
 
 // @author valor.
 
+// NewMessage creates a new email message.
 func NewMessage() *message {
 	return &message{
 		header: &header{
@@ -25,6 +26,7 @@ func NewMessage() *message {
 	}
 }
 
+// SetSender sets the header of email message: 'FROM'.
 func (m *message) SetSender(address string) {
 	m.header.from = &mail.Address{
 		Name:    "",
@@ -32,10 +34,12 @@ func (m *message) SetSender(address string) {
 	}
 }
 
+// SetFrom sets the header of email message: 'FROM'.
 func (m *message) SetFrom(sender *mail.Address) {
 	m.header.from = sender
 }
 
+// SetTo sets the header of email message: 'TO'.
 func (m *message) SetTo(address ...string) {
 	to := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -47,6 +51,7 @@ func (m *message) SetTo(address ...string) {
 	m.header.to = to
 }
 
+// SetTo adds the header of email message: 'TO'.
 func (m *message) AddTo(address ...string) {
 	to := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -58,14 +63,17 @@ func (m *message) AddTo(address ...string) {
 	m.header.to = append(m.header.to, to...)
 }
 
+// SetRcptTo sets the header of email message: 'TO'.
 func (m *message) SetRcptTo(to ...*mail.Address) {
 	m.header.to = to
 }
 
+// AddRcptTo adds the header of email message: 'TO'.
 func (m *message) AddRcptTo(to ...*mail.Address) {
 	m.header.to = append(m.header.to, to...)
 }
 
+// SetCc sets the header of email message: 'CC'.
 func (m *message) SetCc(address ...string) {
 	cc := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -77,6 +85,7 @@ func (m *message) SetCc(address ...string) {
 	m.header.cc = cc
 }
 
+// AddCc adds the header of email message: 'CC'.
 func (m *message) AddCc(address ...string) {
 	cc := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -88,14 +97,17 @@ func (m *message) AddCc(address ...string) {
 	m.header.cc = append(m.header.cc, cc...)
 }
 
+// SetRcptCc sets the header of email message: 'CC'.
 func (m *message) SetRcptCc(cc ...*mail.Address) {
 	m.header.cc = cc
 }
 
+// AddRcptCc adds the header of email message: 'CC'.
 func (m *message) AddRcptCc(cc ...*mail.Address) {
 	m.header.cc = append(m.header.cc, cc...)
 }
 
+// SetBcc sets the header of email message: 'BCC'.
 func (m *message) SetBcc(address ...string) {
 	bcc := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -107,6 +119,7 @@ func (m *message) SetBcc(address ...string) {
 	m.header.bcc = bcc
 }
 
+// AddBcc adds the header of email message: 'BCC'.
 func (m *message) AddBcc(address ...string) {
 	bcc := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
@@ -118,31 +131,38 @@ func (m *message) AddBcc(address ...string) {
 	m.header.bcc = append(m.header.bcc, bcc...)
 }
 
+// SetRcptBcc sets the header of email message: 'BCC'.
 func (m *message) SetRcptBcc(bcc ...*mail.Address) {
 	m.header.bcc = bcc
 }
 
+// AddRcptBcc adds the header of email message: 'BCC'.
 func (m *message) AddRcptBcc(bcc ...*mail.Address) {
 	m.header.bcc = append(m.header.bcc, bcc...)
 }
 
+// SetSubject sets the header of email message: 'SUBJECT'.
 func (m *message) SetSubject(subject string) {
 	m.header.subject = subject
 }
 
+// SetDate sets the header of email message: 'DATE'.
 func (m *message) SetDate(datefmt string) {
 	m.header.datefmt = datefmt
 }
 
+// SetUserAgent sets the header of email message: 'USER-AGENT'.
 func (m *message) SetUserAgent(ua string) {
 	m.header.ua = ua
 }
 
+// AddHeader adds other headers of email message.
 func (m *message) AddHeader(key string, value ...string) {
 	k := strings.ToUpper(key)
 	m.header.extra[k] = value
 }
 
+// SetCopierBody sets a custom part of the body of email message.
 func (m *message) SetCopierBody(contentType string, copier CopyFunc) {
 	m.parts = []*part{
 		{
@@ -152,6 +172,7 @@ func (m *message) SetCopierBody(contentType string, copier CopyFunc) {
 	}
 }
 
+// AddCopierBody adds a custom part of the body of email message.
 func (m *message) AddCopierBody(contentType string, copier CopyFunc) {
 	m.parts = append(m.parts,
 		&part{
@@ -167,6 +188,7 @@ func newTextCopier(s string) CopyFunc {
 	}
 }
 
+// SetPlainBody sets a text part of the body of email message.
 func (m *message) SetPlainBody(text string) {
 	m.parts = []*part{
 		{
@@ -176,6 +198,7 @@ func (m *message) SetPlainBody(text string) {
 	}
 }
 
+// AddPlainBody adds a text part of the body of email message.
 func (m *message) AddPlainBody(text string) {
 	m.parts = append(m.parts,
 		&part{
@@ -185,6 +208,7 @@ func (m *message) AddPlainBody(text string) {
 	)
 }
 
+// SetHtmlBody sets a html part of the body of email message.
 func (m *message) SetHtmlBody(html string) {
 	m.parts = []*part{
 		{
@@ -194,6 +218,7 @@ func (m *message) SetHtmlBody(html string) {
 	}
 }
 
+// AddHtmlBody adds a html part of the body of email message.
 func (m *message) AddHtmlBody(html string) {
 	m.parts = append(m.parts,
 		&part{
@@ -203,25 +228,28 @@ func (m *message) AddHtmlBody(html string) {
 	)
 }
 
-func (m *message) Attach(filename string, saved string, copier CopyFunc) {
+// Attach adds a attachment of email message.
+func (m *message) Attach(filename string, copier CopyFunc) {
 	f := &file{
 		filename:   filename,
-		saved:      saved,
 		attachment: true,
 		copier:     copier,
 	}
 	m.files = append(m.files, f)
 }
 
-func (m *message) Embed(filename string, copier CopyFunc) {
+// Embed adds a embeded file of email message.
+func (m *message) Embed(cid string, copier CopyFunc) {
 	f := &file{
-		filename:   filename,
+		filename:   cid,
 		attachment: false,
 		copier:     copier,
 	}
 	m.files = append(m.files, f)
 }
 
+// WriteTo implements io.WriterTo.
+// It dumps the whole message to SMTP server.
 func (m *message) WriteTo(w io.Writer) (int64, error) {
 	if m.header == nil {
 		return 0, errors.New("empty email header")
