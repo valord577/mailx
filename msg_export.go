@@ -238,7 +238,7 @@ func (m *message) Attach(filename string, copier CopyFunc) {
 	m.files = append(m.files, f)
 }
 
-// Embed adds a embeded file of email message.
+// Embed adds a embedded file of email message.
 func (m *message) Embed(cid string, copier CopyFunc) {
 	f := &file{
 		filename:   cid,
