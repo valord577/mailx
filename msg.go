@@ -27,6 +27,8 @@ var multipartWriter = func(w io.Writer) io.WriteCloser {
 	return base64.NewEncoder(base64.StdEncoding, &multipartBase64Writer{w: w})
 }
 
+// CopyFunc is the function that runs when the message is sent.
+// It should copy the content of the emails to the io.Writer(SMTP).
 type CopyFunc func(io.Writer) (int, error)
 
 type message struct {

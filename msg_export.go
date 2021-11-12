@@ -228,10 +228,10 @@ func (m *message) WriteTo(w io.Writer) (int64, error) {
 	}
 
 	var (
-		s = 0
-		n = 0
+		s int = 0
+		n int = 0
 
-		err error = nil
+		err error
 	)
 
 	var buf [30]byte
@@ -294,15 +294,15 @@ func (m *message) WriteTo(w io.Writer) (int64, error) {
 	}
 	s += n
 
-	return int64(n), nil
+	return int64(s), nil
 }
 
 func writePart(partStart string, part *part, out io.Writer) (int, error) {
 	var (
-		s = 0
-		n = 0
+		s int = 0
+		n int = 0
 
-		err error = nil
+		err error
 	)
 
 	n, err = io.WriteString(out, partStart+"\r\n")
@@ -349,10 +349,10 @@ func writePart(partStart string, part *part, out io.Writer) (int, error) {
 
 func writeFile(partStart string, file *file, out io.Writer) (int, error) {
 	var (
-		s = 0
-		n = 0
+		s int = 0
+		n int = 0
 
-		err error = nil
+		err error
 	)
 
 	n, err = io.WriteString(out, partStart+"\r\n")

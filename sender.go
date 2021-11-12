@@ -7,6 +7,7 @@ import (
 
 // @author valor.
 
+// Sender sends emails via *smtp.Client
 type Sender struct {
 	*smtp.Client
 }
