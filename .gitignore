@@ -1,0 +1,8 @@
+# darwin files
+.DS_Store
+
+# intelliJ files
+.idea
+
+# vscode files
+.vscode
