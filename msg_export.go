@@ -229,7 +229,7 @@ func (m *message) WriteTo(w io.Writer) (int64, error) {
 
 	var (
 		s int = 0
-		n int = 0
+		n int
 
 		err error
 	)
@@ -300,7 +300,7 @@ func (m *message) WriteTo(w io.Writer) (int64, error) {
 func writePart(partStart string, part *part, out io.Writer) (int, error) {
 	var (
 		s int = 0
-		n int = 0
+		n int
 
 		err error
 	)
@@ -350,7 +350,7 @@ func writePart(partStart string, part *part, out io.Writer) (int, error) {
 func writeFile(partStart string, file *file, out io.Writer) (int, error) {
 	var (
 		s int = 0
-		n int = 0
+		n int
 
 		err error
 	)
