@@ -31,13 +31,14 @@ var multipartWriter = func(w io.Writer) io.WriteCloser {
 // It should copy the content of the emails to the io.Writer(SMTP).
 type CopyFunc func(io.Writer) (int, error)
 
-type message struct {
+// Message represents an email message.
+type Message struct {
 	header *header
 	parts  []*part
 	files  []*file
 }
 
-func (m *message) sender() (string, error) {
+func (m *Message) sender() (string, error) {
 	if m.header == nil || m.header.from == nil {
 		return "", errors.New("empty email sender")
 	}
@@ -48,7 +49,7 @@ func (m *message) sender() (string, error) {
 	return sender, nil
 }
 
-func (m *message) rcpt() ([]string, error) {
+func (m *Message) rcpt() ([]string, error) {
 	if m.header == nil {
 		return nil, errors.New("empty email rcpt")
 	}

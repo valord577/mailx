@@ -57,7 +57,7 @@ func TestSampleDaemon(t *testing.T) {
 	)
 
 	// Use the channel in your program to send emails.
-	ch := make(chan *message)
+	ch := make(chan *Message)
 
 	go func() {
 		d := &Dialer{

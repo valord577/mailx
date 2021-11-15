@@ -13,7 +13,7 @@ type Sender struct {
 }
 
 // Send sends the given emails.
-func (s *Sender) Send(m *message) error {
+func (s *Sender) Send(m *Message) error {
 	from, err := m.sender()
 	if err != nil {
 		return err

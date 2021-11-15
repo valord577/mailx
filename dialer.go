@@ -147,7 +147,7 @@ func (d *Dialer) dialStartTLS() (*Sender, error) {
 
 // DialAndSend opens a connection to the SMTP server,
 // sends the given emails and closes the connection.
-func (d *Dialer) DialAndSend(m *message) error {
+func (d *Dialer) DialAndSend(m *Message) error {
 	s, err := d.Dial()
 	if err != nil {
 		return err
