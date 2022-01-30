@@ -4,12 +4,21 @@ on: [push, workflow_dispatch]
 
 jobs:
   codecov:
+    env:
+      COVERAGE_FILE: coverage.txt
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup Go SDK
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
       - name: Git checkout
         uses: actions/checkout@v2
-      - name: Code coverage
+      - name: Run Go coverage
+        run: go test -race -coverprofile=${{ env.COVERAGE_FILE }} -covermode=atomic
+      - name: Upload coverage
         uses: codecov/codecov-action@v2
         with:
+          files: ${{ env.COVERAGE_FILE }}
           verbose: true
