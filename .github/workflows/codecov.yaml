@@ -1,0 +1,15 @@
+name: CI - codecov
+
+on: [push, workflow_dispatch]
+
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Code coverage
+        uses: codecov/codecov-action@v2
+        with:
+          verbose: true
