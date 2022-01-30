@@ -124,7 +124,7 @@ func (d *Dialer) dialStartTLS() (*Sender, error) {
 	}
 
 	if ok, _ := c.Extension("STARTTLS"); ok {
-		if err := c.StartTLS(d.tlsConfig()); err != nil {
+		if err = c.StartTLS(d.tlsConfig()); err != nil {
 			c.Close()
 			return nil, err
 		}

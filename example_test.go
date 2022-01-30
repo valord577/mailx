@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"io"
 	"net/mail"
-	"testing"
 	"time"
 )
 
 // @author valor.
 
-func TestSample(t *testing.T) {
+func Sample() {
 	const (
 		smtpHost = "smtp.example.com"
 		smtpPort = 465
@@ -46,7 +45,7 @@ func TestSample(t *testing.T) {
 	}
 }
 
-func TestSampleDaemon(t *testing.T) {
+func SampleDaemon() {
 	const (
 		smtpHost = "smtp.example.com"
 		smtpPort = 465
