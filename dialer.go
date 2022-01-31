@@ -77,56 +77,36 @@ func (d *Dialer) smtpAuth(c *smtp.Client) (smtp.Auth, error) {
 // Dial dials and authenticates to an SMTP server.
 // The returned *Sender should be closed when done using it.
 func (d *Dialer) Dial() (*Sender, error) {
+	var (
+		conn net.Conn
+		err  error
+	)
+	netDialer := &net.Dialer{Timeout: d.Timeout}
+
 	if d.SSLOnConnect {
-		return d.dialSSL()
+		conn, err = tls.DialWithDialer(netDialer, "tcp", d.addr(), d.tlsConfig())
+	} else {
+		// debug: openssl s_client -starttls smtp -ign_eof -crlf -connect <host>:<port>
+		conn, err = netDialer.Dial("tcp", d.addr())
 	}
-	// debug: openssl s_client -starttls smtp -ign_eof -crlf -connect <host>:<port>
-	return d.dialStartTLS()
-}
-
-func (d *Dialer) dialSSL() (*Sender, error) {
-	netDialer := &net.Dialer{Timeout: d.Timeout}
-	conn, err := tls.DialWithDialer(netDialer, "tcp", d.addr(), d.tlsConfig())
 	if err != nil {
 		return nil, err
 	}
+	return d.dial(conn)
+}
 
+func (d *Dialer) dial(conn net.Conn) (*Sender, error) {
 	c, err := d.smtpClient(conn, d.Host)
 	if err != nil {
 		return nil, err
 	}
 
-	auth, err := d.smtpAuth(c)
-	if err != nil {
-		c.Close()
-		return nil, err
-	}
-
-	if auth != nil {
-		if err = c.Auth(auth); err != nil {
-			c.Close()
-			return nil, err
-		}
-	}
-	return &Sender{c}, nil
-}
-
-func (d *Dialer) dialStartTLS() (*Sender, error) {
-	netDialer := &net.Dialer{Timeout: d.Timeout}
-	conn, err := netDialer.Dial("tcp", d.addr())
-	if err != nil {
-		return nil, err
-	}
-
-	c, err := d.smtpClient(conn, d.Host)
-	if err != nil {
-		return nil, err
-	}
-
-	if ok, _ := c.Extension("STARTTLS"); ok {
-		if err = c.StartTLS(d.tlsConfig()); err != nil {
-			c.Close()
-			return nil, err
+	if !d.SSLOnConnect {
+		if ok, _ := c.Extension("STARTTLS"); ok {
+			if err = c.StartTLS(d.tlsConfig()); err != nil {
+				c.Close()
+				return nil, err
+			}
 		}
 	}
 

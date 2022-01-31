@@ -6,6 +6,19 @@ jobs:
   codecov:
     env:
       COVERAGE_FILE: coverage.txt
+      GO_MODULE: github.com/valord577/mailx
+      TEST_SMTP_HOST_K: testSmtpHost
+      TEST_SMTP_HOST_V: ${{ secrets.TEST_SMTP_HOST }}
+      TEST_SMTP_PORT_K: testSmtpPort
+      TEST_SMTP_PORT_V: ${{ secrets.TEST_SMTP_PORT }}
+      TEST_SMTP_USER_K: testSmtpUser
+      TEST_SMTP_USER_V: ${{ secrets.TEST_SMTP_USER }}
+      TEST_SMTP_PASS_K: testSmtpPass
+      TEST_SMTP_PASS_V: ${{ secrets.TEST_SMTP_PASS }}
+      TEST_SMTP_SSL_K: testSmtpSSL
+      TEST_SMTP_SSL_V: ${{ secrets.TEST_SMTP_SSL }}
+      TEST_MAIL_RECV_TO_K: testMailRecvTo
+      TEST_MAIL_RECV_TO_V: ${{ secrets.TEST_MAIL_RECV_TO }}
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +29,18 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
       - name: Run Go coverage
-        run: go test -race -coverprofile=${{ env.COVERAGE_FILE }} -covermode=atomic
+        run: |
+          go test \
+            -ldflags "\
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_SMTP_HOST_K }}=${{ env.TEST_SMTP_HOST_V }}' \
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_SMTP_PORT_K }}=${{ env.TEST_SMTP_PORT_V }}' \
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_SMTP_USER_K }}=${{ env.TEST_SMTP_USER_V }}' \
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_SMTP_PASS_K }}=${{ env.TEST_SMTP_PASS_V }}' \
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_SMTP_SSL_K }}=${{ env.TEST_SMTP_SSL_V }}' \
+              -X '${{ env.GO_MODULE }}.${{ env.TEST_MAIL_RECV_TO_K }}=${{ env.TEST_MAIL_RECV_TO_V }}' \
+            " \
+            "${{ env.GO_MODULE }}" \
+            -race -coverprofile=${{ env.COVERAGE_FILE }} -covermode=atomic
       - name: Upload coverage
         uses: codecov/codecov-action@v2
         with:
