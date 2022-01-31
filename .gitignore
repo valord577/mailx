@@ -6,3 +6,7 @@
 
 # vscode files
 .vscode
+
+# coverage
+coverage.txt
+coverage.html
