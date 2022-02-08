@@ -97,7 +97,7 @@ func TestMessage6(t *testing.T) {
 	m.SetSubject("This is a subject of email.")
 	m.SetHtmlBody(`This is a text/html body. <img src="cid:CID0"/>`)
 	m.Embed("CID0", func(w io.Writer) (int, error) {
-		return io.WriteString(w, "this is a embeded attachment.")
+		return io.WriteString(w, "this is a embedded attachment.")
 	})
 	m.Attach("attach.txt", func(w io.Writer) (int, error) {
 		return io.WriteString(w, "this is a txt attachment.")
