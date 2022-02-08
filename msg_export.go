@@ -37,7 +37,7 @@ func (m *Message) SetTo(address ...string) {
 	m.header.to = to
 }
 
-// SetTo adds the header of email message: 'TO'.
+// AddTo adds the header of email message: 'TO'.
 func (m *Message) AddTo(address ...string) {
 	to := make([]*mail.Address, 0, len(address))
 	for _, addr := range address {
