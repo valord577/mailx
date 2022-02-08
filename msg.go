@@ -38,22 +38,11 @@ type Message struct {
 	files  []*file
 }
 
-func (m *Message) sender() (string, error) {
-	if m.header == nil || m.header.from == nil {
-		return "", errors.New("empty email sender")
-	}
-	sender := m.header.from.Address
-	if sender == "" {
-		return "", errors.New("empty email sender")
-	}
-	return sender, nil
+func (m *Message) setFrom(from string) {
+	m.header.from = from
 }
 
 func (m *Message) rcpt() ([]string, error) {
-	if m.header == nil {
-		return nil, errors.New("empty email rcpt")
-	}
-
 	lenTo := len(m.header.to)
 	lenCc := len(m.header.cc)
 	lenBcc := len(m.header.bcc)
@@ -91,7 +80,7 @@ func (p *part) contentType() string {
 }
 
 type header struct {
-	from *mail.Address
+	from string
 	to   []*mail.Address
 	cc   []*mail.Address
 	bcc  []*mail.Address
@@ -138,9 +127,6 @@ func (h *header) userAgent() string {
 }
 
 func (h *header) writeTo(w io.Writer) (int, error) {
-	if h.from == nil {
-		return 0, errors.New("empty email header: 'FROM'")
-	}
 	if len(h.to) == 0 {
 		return 0, errors.New("empty email header: 'TO'")
 	}
@@ -161,8 +147,13 @@ func (h *header) writeTo(w io.Writer) (int, error) {
 	b.WriteString("\r\n")
 
 	// FROM
+	from := &mail.Address{
+		Name:    "",
+		Address: h.from,
+	}
+
 	b.WriteString("FROM: ")
-	b.WriteString(h.from.String())
+	b.WriteString(from.String())
 	b.WriteString("\r\n")
 
 	// TO

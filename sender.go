@@ -2,29 +2,25 @@ package mailx
 
 import (
 	"io"
-	"net/smtp"
 )
 
 // @author valor.
 
 // Sender sends emails via *smtp.Client
 type Sender struct {
-	*smtp.Client
+	smtpClient
+	from string
 }
 
 // Send sends the given emails.
 func (s *Sender) Send(m *Message) error {
-	from, err := m.sender()
-	if err != nil {
-		return err
-	}
-
 	rcpt, err := m.rcpt()
 	if err != nil {
 		return err
 	}
 
-	return s.send(from, rcpt, m)
+	m.setFrom(s.from)
+	return s.send(s.from, rcpt, m)
 }
 
 // SendOne sends a message implements io.WriterTo

@@ -8,5 +8,4 @@
 .vscode
 
 # coverage
-coverage.txt
-coverage.html
+.coverage

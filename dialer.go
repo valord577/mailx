@@ -3,6 +3,7 @@ package mailx
 import (
 	"crypto/tls"
 	"errors"
+	"io"
 	"net"
 	"net/smtp"
 	"strconv"
@@ -44,11 +45,7 @@ func (d *Dialer) tlsConfig() *tls.Config {
 	return d.TLSConfig
 }
 
-func (d *Dialer) smtpClient(conn net.Conn, host string) (*smtp.Client, error) {
-	return smtp.NewClient(conn, host)
-}
-
-func (d *Dialer) smtpAuth(c *smtp.Client) (smtp.Auth, error) {
+func (d *Dialer) smtpAuth(c smtpClient) (smtp.Auth, error) {
 	if d.Username == "" {
 		return nil, nil
 	}
@@ -84,10 +81,14 @@ func (d *Dialer) Dial() (*Sender, error) {
 	netDialer := &net.Dialer{Timeout: d.Timeout}
 
 	if d.SSLOnConnect {
-		conn, err = tls.DialWithDialer(netDialer, "tcp", d.addr(), d.tlsConfig())
+		tlsDialer := &tls.Dialer{
+			NetDialer: netDialer,
+			Config:    d.tlsConfig(),
+		}
+		conn, err = tlsDial(tlsDialer, "tcp", d.addr())
 	} else {
 		// debug: openssl s_client -starttls smtp -ign_eof -crlf -connect <host>:<port>
-		conn, err = netDialer.Dial("tcp", d.addr())
+		conn, err = netDial(netDialer, "tcp", d.addr())
 	}
 	if err != nil {
 		return nil, err
@@ -96,7 +97,7 @@ func (d *Dialer) Dial() (*Sender, error) {
 }
 
 func (d *Dialer) dial(conn net.Conn) (*Sender, error) {
-	c, err := d.smtpClient(conn, d.Host)
+	c, err := newSmtpClient(conn, d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +123,7 @@ func (d *Dialer) dial(conn net.Conn) (*Sender, error) {
 			return nil, err
 		}
 	}
-	return &Sender{c}, nil
+	return &Sender{c, d.Username}, nil
 }
 
 // DialAndSend opens a connection to the SMTP server,
@@ -135,4 +136,30 @@ func (d *Dialer) DialAndSend(m *Message) error {
 	defer s.Close()
 
 	return s.Send(m)
+}
+
+// Stubbed out for tests.
+var (
+	netDial = func(dialer *net.Dialer, network, addr string) (net.Conn, error) {
+		return dialer.Dial(network, addr)
+	}
+	tlsDial = func(dialer *tls.Dialer, network, addr string) (net.Conn, error) {
+		return dialer.Dial(network, addr)
+	}
+
+	newSmtpClient = func(conn net.Conn, host string) (smtpClient, error) {
+		return smtp.NewClient(conn, host)
+	}
+)
+
+type smtpClient interface {
+	Hello(string) error
+	Extension(string) (bool, string)
+	StartTLS(*tls.Config) error
+	Auth(smtp.Auth) error
+	Mail(string) error
+	Rcpt(string) error
+	Data() (io.WriteCloser, error)
+	Quit() error
+	Close() error
 }

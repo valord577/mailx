@@ -3,7 +3,6 @@ package mailx
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"io"
 	"net/mail"
 	"strings"
@@ -24,19 +23,6 @@ func NewMessage() *Message {
 		parts: make([]*part, 0),
 		files: make([]*file, 0),
 	}
-}
-
-// SetSender sets the header of email message: 'FROM'.
-func (m *Message) SetSender(address string) {
-	m.header.from = &mail.Address{
-		Name:    "",
-		Address: address,
-	}
-}
-
-// SetFrom sets the header of email message: 'FROM'.
-func (m *Message) SetFrom(sender *mail.Address) {
-	m.header.from = sender
 }
 
 // SetTo sets the header of email message: 'TO'.
@@ -251,10 +237,6 @@ func (m *Message) Embed(cid string, copier CopyFunc) {
 // WriteTo implements io.WriterTo.
 // It dumps the whole message to SMTP server.
 func (m *Message) WriteTo(w io.Writer) (int64, error) {
-	if m.header == nil {
-		return 0, errors.New("empty email header")
-	}
-
 	var (
 		s int = 0
 		n int
