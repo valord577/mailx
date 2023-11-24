@@ -371,23 +371,20 @@ func writeFile(partStart string, file *file, out io.Writer) (int, error) {
 	}
 	s += n
 
-	// The name of file may contain non-ascii characters.
-	n, err = io.WriteString(out, "Content-Type: "+headerEncoder.Encode(charset, file.contentType())+"\r\n")
+	n, err = io.WriteString(out, "Content-Type: "+file.contentType()+"\r\n")
 	if err != nil {
 		return 0, err
 	}
 	s += n
 
-	// The name of file may contain non-ascii characters.
-	n, err = io.WriteString(out, "Content-Disposition: "+headerEncoder.Encode(charset, file.disposition())+"\r\n")
+	n, err = io.WriteString(out, "Content-Disposition: "+file.disposition()+"\r\n")
 	if err != nil {
 		return 0, err
 	}
 	s += n
 
 	if !file.attachment {
-		// The name of file may contain non-ascii characters.
-		n, err = io.WriteString(out, "Content-ID: <"+headerEncoder.Encode(charset, file.filename)+">\r\n")
+		n, err = io.WriteString(out, "Content-ID: <"+file.filename+">\r\n")
 		if err != nil {
 			return 0, err
 		}

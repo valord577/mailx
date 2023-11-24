@@ -23,7 +23,7 @@ func (f *file) contentType() string {
 	if mediaType == "" {
 		mediaType = "application/octet-stream"
 	}
-	return mediaType + `; name="` + f.filename + `"`
+	return mediaType
 }
 
 func (f *file) disposition() string {
