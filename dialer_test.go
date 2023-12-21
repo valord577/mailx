@@ -69,6 +69,9 @@ func testSmtp(t *testing.T, ssl bool, ext map[string]string) {
 
 		SSLOnConnect: ssl,
 	}
+	if ssl {
+		d.TLSConfig = &tls.Config{ServerName: d.Host}
+	}
 
 	netDial = func(*net.Dialer, string, string) (net.Conn, error) {
 		return nil, nil
@@ -80,12 +83,25 @@ func testSmtp(t *testing.T, ssl bool, ext map[string]string) {
 		return &mockSmtpClient{ext}, nil
 	}
 
-	m := NewMessage()
-	m.SetTo("aaaaa@example.com")
-	m.SetSubject("This is a subject of email.")
-	m.SetPlainBody("This is a text/plain body.")
+	m0 := NewMessage()
+	m0.SetTo("aaaaa@example.com")
+	m0.SetBcc("ccccc@example.com")
+	m0.SetSubject("This is a subject of email.")
+	m0.SetPlainBody("This is a text/plain body.")
 
-	err := d.DialAndSend(m)
+	err := d.DialAndSend(m0)
+	if err != nil {
+		t.Fatalf("dialer err: %s", err.Error())
+	}
+
+	m1 := NewMessage()
+	m1.SetSender("")
+	m1.SetTo("aaaaa@example.com")
+	m1.SetCc("bbbbb@example.com")
+	m1.SetSubject("This is a subject of email.")
+	m1.SetPlainBody("This is a text/plain body.")
+
+	err = d.DialAndSend(m1)
 	if err != nil {
 		t.Fatalf("dialer err: %s", err.Error())
 	}

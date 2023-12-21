@@ -10,6 +10,7 @@ import (
 
 func TestMessage1(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaa-1@example.com")
 	m.AddTo("aaa-2@example.com")
 	m.SetCc("bbb-1@example.com")
@@ -27,6 +28,7 @@ func TestMessage1(t *testing.T) {
 
 func TestMessage2(t *testing.T) {
 	m := NewMessage()
+	m.SetFrom(&mail.Address{Name: "alex", Address: "alex@example.com"})
 	m.SetRcptTo(&mail.Address{Name: "aaa-1", Address: "aaa-1@example.com"})
 	m.AddRcptTo(&mail.Address{Name: "aaa-2", Address: "aaa-2@example.com"})
 	m.SetRcptCc(&mail.Address{Name: "bbb-1", Address: "bbb-1@example.com"})
@@ -44,6 +46,7 @@ func TestMessage2(t *testing.T) {
 
 func TestMessage3(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	m.SetSubject("This is a subject of email.")
@@ -58,6 +61,7 @@ func TestMessage3(t *testing.T) {
 
 func TestMessage4(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	m.SetSubject("This is a subject of email.")
@@ -72,6 +76,7 @@ func TestMessage4(t *testing.T) {
 
 func TestMessage5(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	m.SetSubject("This is a subject of email.")
@@ -92,6 +97,7 @@ func TestMessage5(t *testing.T) {
 
 func TestMessage6(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	m.SetSubject("This is a subject of email.")
@@ -111,6 +117,7 @@ func TestMessage6(t *testing.T) {
 
 func TestMessage7(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	m.SetUserAgent("ua - test mailx")
@@ -127,6 +134,7 @@ func TestMessage7(t *testing.T) {
 
 func TestErrMessage1(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 
 	m.SetSubject("This is a subject of email.")
 
@@ -138,6 +146,7 @@ func TestErrMessage1(t *testing.T) {
 
 func TestErrMessage2(t *testing.T) {
 	m := NewMessage()
+	m.SetSender("alex@example.com")
 	m.SetTo("aaaaa@example.com")
 
 	_, err := m.WriteTo(io.Discard)

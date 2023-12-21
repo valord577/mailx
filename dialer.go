@@ -123,7 +123,7 @@ func (d *Dialer) dial(conn net.Conn) (*Sender, error) {
 			return nil, err
 		}
 	}
-	return &Sender{c, d.Username}, nil
+	return &Sender{smtpClient: c, from: d.Username}, nil
 }
 
 // DialAndSend opens a connection to the SMTP server,
