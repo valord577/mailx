@@ -2,6 +2,12 @@
 
 All notable changes to **mailx** are documented in this file.
 
+## v0.4.20231124
+
+#### Fixed
+
+- Unable to display unicode attachment name correctly.
+
 ## v0.3.20220208
 
 #### Changed
