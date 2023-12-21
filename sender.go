@@ -14,16 +14,21 @@ type Sender struct {
 
 // Send sends the given emails.
 func (s *Sender) Send(m *Message) error {
+	from, err := m.sender()
+	if err != nil {
+		from = s.from
+		m.SetSender(s.from)
+	}
+
 	rcpt, err := m.rcpt()
 	if err != nil {
 		return err
 	}
 
-	m.setFrom(s.from)
-	return s.send(s.from, rcpt, m)
+	return s.send(from, rcpt, m)
 }
 
-// SendOne sends a message implements io.WriterTo
+// send sends a message implements io.WriterTo
 func (s *Sender) send(from string, to []string, msg io.WriterTo) error {
 	if err := s.Mail(from); err != nil {
 		return err
