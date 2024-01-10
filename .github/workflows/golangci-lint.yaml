@@ -1,0 +1,33 @@
+name: golangci-lint
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'golangci-lint.sh'
+      - '.golangci.yml'
+  pull_request:
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - '.golangci.yml'
+
+jobs:
+  golangci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+      - name: Setup Go SDK
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.21.0'
+          check-latest: true
+      - name: Show Go version
+        run: go version
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          install-mode: binary
