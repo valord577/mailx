@@ -1,0 +1,28 @@
+run:
+  go: '1.21'
+  modules-download-mode: 'readonly'
+  allow-serial-runners: true
+  print-resources-usage: true
+output:
+  format: 'colored-line-number'
+linters:
+  disable-all: true
+  enable:
+    - 'errcheck'
+    - 'govet'
+    - 'staticcheck'
+linters-settings:
+  errcheck:
+    ignore: 'fmt:.*,bytes:^Write.*'
+    check-type-assertions: true
+    disable-default-exclusions: true
+  govet:
+    check-shadowing: true
+    enable-all: true
+    disable:
+      - 'fieldalignment'
+  staticcheck:
+    checks: ["all"]
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

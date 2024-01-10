@@ -1,19 +1,20 @@
-name: coverage
+name: golangci-lint
 on:
   workflow_dispatch:
   push:
     paths:
       - '**.go'
       - 'go.mod'
-      - 'coverage.sh'
+      - 'golangci-lint.sh'
+      - '.golangci.yml'
   pull_request:
     paths:
       - '**.go'
       - 'go.mod'
-      - 'coverage.sh'
+      - '.golangci.yml'
 
 jobs:
-  codecov:
+  golangci:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -23,11 +24,8 @@ jobs:
         with:
           go-version: '>=1.21.0'
           check-latest: true
-      - name: Run Go coverage
-        run: ${{ github.workspace }}/coverage.sh
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
         with:
-          files: ${{ github.workspace }}/coverage.txt
-          verbose: true
-          fail_ci_if_error: true
+          version: latest
+          install-mode: binary
