@@ -5,7 +5,6 @@ on:
     paths:
       - '**.go'
       - 'go.mod'
-      - 'golangci-lint.sh'
       - '.golangci.yml'
   pull_request:
     paths:
