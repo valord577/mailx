@@ -23,8 +23,6 @@ jobs:
         with:
           go-version: '>=1.21.0'
           check-latest: true
-      - name: Show Go version
-        run: go version
       - name: Run Go coverage
         run: ${{ github.workspace }}/coverage.sh
       - name: Upload coverage
