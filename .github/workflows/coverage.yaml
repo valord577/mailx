@@ -15,11 +15,16 @@ on:
 jobs:
   codecov:
     runs-on: ubuntu-latest
-    container: valord577/linux-cgo1.21:117600adcc53b9dd0ac2f69b3206857e2052de9e
-
     steps:
-      - name: Git Checkout
+      - name: Git checkout
         uses: actions/checkout@v4
+      - name: Setup Go SDK
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.21.0'
+          check-latest: true
+      - name: Show Go version
+        run: go version
       - name: Run Go coverage
         run: ${{ github.workspace }}/coverage.sh
       - name: Upload coverage
