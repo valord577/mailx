@@ -1,0 +1,30 @@
+name: coverage
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'coverage.sh'
+  pull_request:
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'coverage.sh'
+
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+    container: valord577/linux-cgo1.21:117600adcc53b9dd0ac2f69b3206857e2052de9e
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+      - name: Run Go coverage
+        run: ${{ github.workspace }}/coverage.sh
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ${{ github.workspace }}/coverage.txt
+          verbose: true
+          fail_ci_if_error: true

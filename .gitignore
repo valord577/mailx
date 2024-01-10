@@ -1,11 +1,5 @@
-# darwin files
 .DS_Store
-
-# intelliJ files
 .idea
 
-# vscode files
-.vscode
-
-# coverage
-.coverage
+coverage.txt
+coverage.html
