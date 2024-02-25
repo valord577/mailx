@@ -6,11 +6,13 @@ on:
       - '**.go'
       - 'go.mod'
       - 'coverage.sh'
+      - '.github/workflows/coverage.yaml'
   pull_request:
     paths:
       - '**.go'
       - 'go.mod'
       - 'coverage.sh'
+      - '.github/workflows/coverage.yaml'
 
 jobs:
   codecov:
@@ -19,15 +21,16 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
       - name: Setup Go SDK
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '>=1.21.0'
           check-latest: true
       - name: Run Go coverage
         run: ${{ github.workspace }}/coverage.sh
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ github.workspace }}/coverage.txt
           verbose: true
           fail_ci_if_error: true
