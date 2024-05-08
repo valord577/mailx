@@ -10,6 +10,7 @@ import (
 	"mime"
 	"net/mail"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -92,6 +93,8 @@ type header struct {
 	cc   []*mail.Address
 	bcc  []*mail.Address
 
+	singledestheaders bool
+
 	subject string
 	datefmt string
 
@@ -158,19 +161,43 @@ func (h *header) writeTo(w io.Writer) (int, error) {
 	b.WriteString(h.from.String())
 	b.WriteString("\r\n")
 
-	// TO
-	for _, to := range h.to {
-		b.WriteString("TO: ")
-		b.WriteString(to.String())
-		b.WriteString("\r\n")
-	}
+	var length int
+	if !h.singledestheaders {
+		// TO
+		for _, to := range h.to {
+			b.WriteString("TO: ")
+			b.WriteString(to.String())
+			b.WriteString("\r\n")
+		}
 
-	// CC
-	length := len(h.cc)
-	if length > 0 {
-		for _, cc := range h.cc {
+		// CC
+		length = len(h.cc)
+		if length > 0 {
+			for _, cc := range h.cc {
+				b.WriteString("CC: ")
+				b.WriteString(cc.String())
+				b.WriteString("\r\n")
+			}
+		}
+	} else {
+		// TO
+		b.WriteString("TO: ")
+		toList := []string{}
+		for _, to := range h.to {
+			toList = append(toList, to.String())
+		}
+		b.WriteString(strings.Join(toList, ","))
+		b.WriteString("\r\n")
+
+		// CC
+		length = len(h.cc)
+		if length > 0 {
 			b.WriteString("CC: ")
-			b.WriteString(cc.String())
+			ccList := []string{}
+			for _, cc := range h.cc {
+				ccList = append(ccList, cc.String())
+			}
+			b.WriteString(strings.Join(ccList, ","))
 			b.WriteString("\r\n")
 		}
 	}

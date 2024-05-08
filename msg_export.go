@@ -140,6 +140,10 @@ func (m *Message) AddRcptBcc(bcc ...*mail.Address) {
 	m.header.bcc = append(m.header.bcc, bcc...)
 }
 
+func (m *Message) SetSingleDestinationHeaders(single bool) {
+	m.header.singledestheaders = single
+}
+
 // SetSubject sets the header of email message: 'SUBJECT'.
 func (m *Message) SetSubject(subject string) {
 	m.header.subject = subject
