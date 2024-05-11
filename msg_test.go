@@ -10,6 +10,7 @@ import (
 
 func TestMessage1(t *testing.T) {
 	m := NewMessage()
+	m.SetSingleRecvAddr(true)
 	m.SetSender("alex@example.com")
 	m.SetTo("aaa-1@example.com")
 	m.AddTo("aaa-2@example.com")
