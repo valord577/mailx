@@ -19,7 +19,7 @@ Gomail supports:
 - HTML and text templates
 - TLS connection and STARTTLS extension
 - Sending multiple emails with the same SMTP connection
-- Single destination headers are used in compliance with RFC 5322 #7
+- Single destination headers are used in compliance with RFC 5322 [#7](#7)
 
 Installing
 ------
