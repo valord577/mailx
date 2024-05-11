@@ -140,6 +140,13 @@ func (m *Message) AddRcptBcc(bcc ...*mail.Address) {
 	m.header.bcc = append(m.header.bcc, bcc...)
 }
 
+// SetSingleRecvAddr sets a flag which whether or not to
+// let receiver's addresses in header combined into one line.
+// see https://www.rfc-editor.org/rfc/rfc5322#section-3.6.3
+func (m *Message) SetSingleRecvAddr(single bool) {
+	m.header.singleRecvAddr = single
+}
+
 // SetSubject sets the header of email message: 'SUBJECT'.
 func (m *Message) SetSubject(subject string) {
 	m.header.subject = subject

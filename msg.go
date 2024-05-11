@@ -92,6 +92,8 @@ type header struct {
 	cc   []*mail.Address
 	bcc  []*mail.Address
 
+	singleRecvAddr bool
+
 	subject string
 	datefmt string
 
@@ -159,18 +161,41 @@ func (h *header) writeTo(w io.Writer) (int, error) {
 	b.WriteString("\r\n")
 
 	// TO
-	for _, to := range h.to {
+	length := len(h.to)
+	if length == 1 || !h.singleRecvAddr {
+		for _, to := range h.to {
+			b.WriteString("TO: ")
+			b.WriteString(to.String())
+			b.WriteString("\r\n")
+		}
+	} else {
 		b.WriteString("TO: ")
-		b.WriteString(to.String())
+		for i, to := range h.to {
+			b.WriteString(to.String())
+			if i < length-1 {
+				b.WriteString(",")
+			}
+		}
 		b.WriteString("\r\n")
 	}
 
 	// CC
-	length := len(h.cc)
+	length = len(h.cc)
 	if length > 0 {
-		for _, cc := range h.cc {
+		if length == 1 || !h.singleRecvAddr {
+			for _, cc := range h.cc {
+				b.WriteString("CC: ")
+				b.WriteString(cc.String())
+				b.WriteString("\r\n")
+			}
+		} else {
 			b.WriteString("CC: ")
-			b.WriteString(cc.String())
+			for i, cc := range h.cc {
+				b.WriteString(cc.String())
+				if i < length-1 {
+					b.WriteString(",")
+				}
+			}
 			b.WriteString("\r\n")
 		}
 	}
