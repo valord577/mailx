@@ -2,6 +2,13 @@
 
 All notable changes to **mailx** are documented in this file.
 
+## v0.6.20240511
+
+#### Added
+
+- Single destination headers are used in compliance with RFC 5322 (#7).
+    * https://www.rfc-editor.org/rfc/rfc5322#section-3.6.3
+
 ## v0.5.20231221
 
 #### Added
