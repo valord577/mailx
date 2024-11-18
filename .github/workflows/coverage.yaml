@@ -28,7 +28,7 @@ jobs:
       - name: Run Go coverage
         run: ${{ github.workspace }}/coverage.sh
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ github.workspace }}/coverage.txt
