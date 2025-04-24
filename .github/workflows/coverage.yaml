@@ -2,35 +2,50 @@ name: coverage
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths:
-      - '**.go'
-      - 'go.mod'
-      - 'coverage.sh'
       - '.github/workflows/coverage.yaml'
+      - '*.go'
+      - '**/*.go'
+      - 'go.mod'
+      - 'qa_coverage.sh'
   pull_request:
+    branches:
+      - main
     paths:
-      - '**.go'
-      - 'go.mod'
-      - 'coverage.sh'
       - '.github/workflows/coverage.yaml'
+      - '*.go'
+      - '**/*.go'
+      - 'go.mod'
+      - 'qa_coverage.sh'
 
 jobs:
   codecov:
     runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: valord577/linux-cross-cgo:latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v4
-      - name: Setup Go SDK
-        uses: actions/setup-go@v5
-        with:
-          go-version: '>=1.21.0'
-          check-latest: true
-      - name: Run Go coverage
-        run: ${{ github.workspace }}/coverage.sh
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
+      - name: clone source
+        run: |
+          git config --global --add safe.directory "*"
+
+          git init
+          git remote add x ${{github.server_url}}/${{ github.repository }}.git
+          git fetch --no-tags --prune --no-recurse-submodules --depth=1 x +${{ github.sha }}
+          git checkout FETCH_HEAD
+      - name: coverage
+        run: |
+          ./qa_coverage.sh
+      - name: coverage to codecov
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ${{ github.workspace }}/coverage.txt
+          files: ${{ github.workspace }}/qa_coverage.txt
           verbose: true
           fail_ci_if_error: true

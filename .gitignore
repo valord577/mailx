@@ -1,5 +1,5 @@
 .DS_Store
 .idea
 
-coverage.txt
-coverage.html
+qa_coverage.txt
+qa_coverage.html

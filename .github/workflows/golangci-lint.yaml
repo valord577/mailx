@@ -2,31 +2,45 @@ name: golangci-lint
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths:
-      - '**.go'
-      - 'go.mod'
-      - '.golangci.yml'
       - '.github/workflows/golangci-lint.yaml'
+      - '.golangci.yml'
+      - '*.go'
+      - '**/*.go'
+      - 'go.mod'
+      - 'qa_golangci-lint.sh'
   pull_request:
+    branches:
+      - main
     paths:
-      - '**.go'
-      - 'go.mod'
-      - '.golangci.yml'
       - '.github/workflows/golangci-lint.yaml'
+      - '.golangci.yml'
+      - '*.go'
+      - '**/*.go'
+      - 'go.mod'
+      - 'qa_golangci-lint.sh'
 
 jobs:
   golangci:
     runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: valord577/linux-cross-cgo:latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v4
-      - name: Setup Go SDK
-        uses: actions/setup-go@v5
-        with:
-          go-version: '>=1.21.0'
-          check-latest: true
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          install-mode: binary
+      - name: clone source
+        run: |
+          git config --global --add safe.directory "*"
+
+          git init
+          git remote add x ${{github.server_url}}/${{ github.repository }}.git
+          git fetch --no-tags --prune --no-recurse-submodules --depth=1 x +${{ github.sha }}
+          git checkout FETCH_HEAD
+      - name: golangci-lint
+        run: |
+          ./qa_golangci-lint.sh
