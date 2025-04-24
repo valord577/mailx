@@ -1,26 +1,26 @@
-name: golangci-lint
+name: golangci
 on:
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/golangci-lint.yaml'
+      - '.github/workflows/golangci.yaml'
       - '.golangci.yml'
       - '*.go'
       - '**/*.go'
       - 'go.mod'
-      - 'qa_golangci-lint.sh'
+      - 'qa_golangci.sh'
   pull_request:
     branches:
       - main
     paths:
-      - '.github/workflows/golangci-lint.yaml'
+      - '.github/workflows/golangci.yaml'
       - '.golangci.yml'
       - '*.go'
       - '**/*.go'
       - 'go.mod'
-      - 'qa_golangci-lint.sh'
+      - 'qa_golangci.sh'
 
 jobs:
   golangci:
@@ -41,6 +41,6 @@ jobs:
           git remote add x ${{github.server_url}}/${{ github.repository }}.git
           git fetch --no-tags --prune --no-recurse-submodules --depth=1 x +${{ github.sha }}
           git checkout FETCH_HEAD
-      - name: golangci-lint
+      - name: golangci
         run: |
-          ./qa_golangci-lint.sh
+          ./qa_golangci.sh
