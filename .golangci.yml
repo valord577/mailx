@@ -1,10 +1,10 @@
 run:
-  go: '1.21'
+  go: '1.24'
   modules-download-mode: 'readonly'
   allow-serial-runners: true
   print-resources-usage: true
 output:
-  format: 'colored-line-number'
+  formats: 'colored-line-number'
 linters:
   disable-all: true
   enable:
@@ -14,11 +14,12 @@ linters:
     - 'staticcheck'
 linters-settings:
   errcheck:
-    ignore: 'fmt:.*,bytes:^Write.*'
+    exclude-functions:
+      - (*bytes.Buffer).WriteString
     check-type-assertions: true
     disable-default-exclusions: true
   govet:
-    check-shadowing: true
+    shadow: true
     enable-all: true
     disable:
       - 'fieldalignment'

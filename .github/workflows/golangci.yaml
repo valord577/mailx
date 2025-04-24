@@ -1,27 +1,29 @@
-name: coverage
+name: golangci
 on:
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/coverage.yaml'
+      - '.github/workflows/golangci.yaml'
+      - '.golangci.yml'
       - '*.go'
       - '**/*.go'
       - 'go.mod'
-      - 'qa_coverage.sh'
+      - 'qa_golangci.sh'
   pull_request:
     branches:
       - main
     paths:
-      - '.github/workflows/coverage.yaml'
+      - '.github/workflows/golangci.yaml'
+      - '.golangci.yml'
       - '*.go'
       - '**/*.go'
       - 'go.mod'
-      - 'qa_coverage.sh'
+      - 'qa_golangci.sh'
 
 jobs:
-  codecov:
+  golangci:
     runs-on: ubuntu-latest
     continue-on-error: true
     container:
@@ -39,15 +41,6 @@ jobs:
           git remote add x ${{github.server_url}}/${{ github.repository }}.git
           git fetch --no-tags --prune --no-recurse-submodules --depth=1 x +${{ github.sha }}
           git checkout FETCH_HEAD
-      - name: coverage
+      - name: golangci
         run: |
-          ./qa_coverage.sh
-      - name: required to codecov
-        run: |
-          apt update; apt install -y gpg
-      - name: coverage to codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          fail_ci_if_error: true
+          ./qa_golangci.sh
