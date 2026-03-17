@@ -4,22 +4,21 @@ Mailx
 [![Go Report](https://goreportcard.com/badge/github.com/valord577/mailx)](https://goreportcard.com/report/github.com/valord577/mailx)
 [![Go Reference](https://pkg.go.dev/badge/github.com/valord577/mailx.svg)](https://pkg.go.dev/github.com/valord577/mailx)
 [![License](https://img.shields.io/github/license/valord577/mailx)](LICENSE)
-[![Codecov](https://codecov.io/gh/valord577/mailx/branch/main/graph/badge.svg?token=GXGTBNC94F)](https://codecov.io/gh/valord577/mailx)
+[![Codecov](https://codecov.io/gh/valord577/mailx/branch/main/graph/badge.svg?token=GXGTBNC94F)](https://codecov.io/gh/valord577/mailx)<br>
 [![Go compat](https://img.shields.io/github/go-mod/go-version/valord577/mailx?label=compatibility)](#)
 [![Go module](https://badge.fury.io/go/github.com%2Fvalord577%2Fmailx.svg)](https://badge.fury.io/go/github.com%2Fvalord577%2Fmailx)
 
-Mailx is a library that makes it easier to send email via SMTP. It is an enhancement of the golang standard library `net/smtp`.
+Mailx is a library that makes it easier to send email via SMTP.<br>
+It is an enhancement of the golang standard library `net/smtp`.<br>
 
 Features
 ------
-
-Gomail supports:
 
 - Attachments and embedded files
 - HTML and text templates
 - TLS connection and STARTTLS extension
 - Sending multiple emails with the same SMTP connection
-- Single destination headers are used in compliance with RFC 5322 [#7](https://github.com/valord577/mailx/pull/7)
+- Comma-separated list of one or more addresses ([RFC 5322 - 3.6.3](https://www.rfc-editor.org/rfc/rfc5322#section-3.6.3) via [#7](https://github.com/valord577/mailx/pull/7))
 
 Installing
 ------

@@ -6,8 +6,7 @@ All notable changes to **mailx** are documented in this file.
 
 #### Added
 
-- Single destination headers are used in compliance with RFC 5322 [#7](https://github.com/valord577/mailx/pull/7).
-    * https://www.rfc-editor.org/rfc/rfc5322#section-3.6.3
+- Comma-separated list of one or more addresses ([RFC 5322 - 3.6.3](https://www.rfc-editor.org/rfc/rfc5322#section-3.6.3) via [#7](https://github.com/valord577/mailx/pull/7))
 
 ## v0.5.20231221
 
